@@ -1,13 +1,11 @@
 #include <iostream> 
-#include <conio.h>
 #include <ctime>
 using namespace std;
 
 // PROGRAM PEMINJAMAN BARANG
 
-// Variable
-const int a=5; 	// Limit user
-int id=0;		// id = nomor id real-time
+const int a=5; 		// Limit user
+int id=0, idlast=0;	// id = nomor id real-time, idlast = nomor id terbesar
 string email, password_admin;
 string username[a];
 string password[a];
@@ -33,8 +31,6 @@ void admin();
 void menu_admin();
 
 int main(){
-	system ("color 02"); //0 background, 2 text
-	cout << hari_ini;
 	if(id==0){
 		for(int i=1; i<a; i++){
 			status[i]="Belum di periksa";
@@ -53,21 +49,21 @@ int main(){
 	cout << "...................................................." << endl << endl << endl;
 	cout << "           [1] MASUK          [2] DAFTAR" << endl << endl << endl;
 	cout << "...................................................." << endl;
-	cout << id << " ==> ";
+	cout << " ==> ";
 	
 	int pilihan;
 	cin >> pilihan;
 	if(pilihan==1){
-		system("cls"); cout << hari_ini;
+		system("cls"); cout << hari_ini << endl;
 		login();
 	}else if(pilihan==2){
-		system("cls"); cout << hari_ini;
+		system("cls"); cout << hari_ini << endl;
 		while(id<=a){
 			cout << "...................................................." << endl;
 			cout << ".                   DAFTAR AKUN                    ." << endl;
 			cout << "...................................................." << endl;
-			id++;
 			cout << endl;
+			id=idlast+1;
 			cout << "    username: ";
 			cin >> username[id];
 			cout << "    password: ";
@@ -80,9 +76,19 @@ int main(){
 			cin >> pilihan;
 			if(pilihan==1){
 				system("cls");
+				cout << hari_ini;
+				idlast=id;
+				cout << "Akun berhasil dibuat ..." << endl;
 				main(); break;
 			}else{
-				break;
+				system("cls");
+				cout << hari_ini;
+				for (int i=id;i<a-1;i++){ 
+					username[i]=username[i+1];
+				}
+				id--;
+				cout << "Daftar akun dibatalkan ..." << endl;
+				main(); break;
 			}
 		}
    	}else{
@@ -394,33 +400,43 @@ void menu_admin(){
 	cout << "...................................................." << endl;
 	cout << "[1] Daftar Username" << endl;
 	cout << "[2] Edit Status" << endl;
-	cout << "\n\n\n";
+	cout << "\n\n";
+	cout << "[0] Kembali" << endl;
 	cout << "...................................................." << endl;
 	
-	int pilihan, i=0;
+	int pilihan, i;
 	cout << "==> ";
 	cin >> pilihan;
 	switch(pilihan){
+		case 0:
+			system("cls");
+			cout << hari_ini << endl;
+			main(); break;
 		case 1:
 			daftar_user:
 			system("cls");
+			cout << hari_ini << endl;
 			cout << "...................................................." << endl;
 			cout << "                    DAFTAR USER" << endl;
 			cout << "...................................................." << endl;
-			cout << "ID\tUsername\t\tPassword" << endl;
+			cout << "ID\tUsername\tPassword" << endl;
+			i=1;
 			while(i<=id){
 				cout << i << "\t" << username[i] << "\t\t" << password[i] << endl;
 				i++;
 			}
 			cout << endl;
 			int pilihan;
+			cout << "[0] Kembali" << endl;
+			cout << "...................................................." << endl;
 			cout << "Pilih User ==> ";
 			cin >> pilihan;
+			i=0;
 			if(pilihan==0){
 				system("cls");
 				cout << hari_ini << endl;
 				menu_admin();
-			}else{
+			}else if(i<=id){
 				for(int i=1; i<=id; i++){
 					if(pilihan==i){
 						cout << endl;
@@ -441,6 +457,11 @@ void menu_admin(){
 						goto daftar_user;
 					}
 				}
+			}else{
+				system("cls");
+				cout << hari_ini << endl;
+				cout << "(!) Instruksi salah... " << endl;
+				goto daftar_user;
 			}
 			break;
 		case 2:
@@ -448,6 +469,7 @@ void menu_admin(){
 			int pilihan2;
 			cout << "Pilih ID User ==> ";
 			cin >> pilihan2;
+			i=0;
 			if(pilihan2==0){
 				system("cls");
 				cout << hari_ini << endl;
@@ -476,13 +498,11 @@ void menu_admin(){
 				}
 			}
 			break;
-		case 3:
+		default:
 			system("cls");
-			cout << hari_ini << endl;
-			main();
+			cout << hari_ini;
+			cout << "(!) Instruksi salah... " << endl;
+			menu_admin();
+			break;
 	}
 }
-
-// Ngirim pesan ke user lain/admin
-// 
-
